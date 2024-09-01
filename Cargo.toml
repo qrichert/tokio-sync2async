@@ -1,8 +1,8 @@
 [package]
 name = "tokio-sync2async"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
-description = "Helpers to bridge sync and async code."
+description = "Helpers to bridge between sync and async code."
 authors = ["Quentin Richert <noreply@richert.co>"]
 license = "MIT"
 repository = "https://github.com/qrichert/tokio-sync2async.git"
@@ -11,6 +11,7 @@ keywords = ["tokio", "asynchronous"]
 categories = ["asynchronous"]
 
 [dependencies]
-tokio = { version = "1", features = ["rt"] }
+tokio = { version = "1", features = ["rt", "rt-multi-thread"] }
 
-
+[dev-dependencies]
+tokio = { version = "1", features = ["macros"] }
