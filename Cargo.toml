@@ -1,0 +1,16 @@
+[package]
+name = "tokio-sync2async"
+version = "0.1.0"
+edition = "2021"
+description = "Helpers to bridge sync and async code."
+authors = ["Quentin Richert <noreply@richert.co>"]
+license = "MIT"
+repository = "https://github.com/qrichert/tokio-sync2async.git"
+readme = "README.md"
+keywords = ["tokio", "asynchronous"]
+categories = ["asynchronous"]
+
+[dependencies]
+tokio = { version = "1", features = ["rt"] }
+
+
