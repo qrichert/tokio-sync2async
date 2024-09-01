@@ -1,7 +1,18 @@
 //! Helpers to bridge between sync and async code.
 
 use std::future::Future;
-use tokio::{runtime::Handle, task};
+use std::io;
+
+use tokio::{runtime, task};
+
+/// Build same runtime as `#[tokio::main]`.
+///
+/// # Errors
+///
+/// Errors if runtime cannot be built.
+pub fn make_runtime() -> io::Result<runtime::Runtime> {
+    runtime::Builder::new_multi_thread().enable_all().build()
+}
 
 /// Run a task inside an async runtime from a blocking context.
 ///
@@ -47,13 +58,14 @@ use tokio::{runtime::Handle, task};
 ///   thread that _does not block the async executor_. This ensures that
 ///   while the blocking operation is executing, the async runtime can
 ///   continue running other tasks.
-/// - [`Handle::current()`] gives us access to the main runtime.
-/// - [`handle.block_on()`](Handle::block_on) executes the future and
-///   blocks until it completes. This is crucial as well. Since the
+/// - [`Handle::current()`](runtime::Handle::current) gives us access to
+///   the main runtime.
+/// - [`handle.block_on()`](runtime::Handle::block_on) runs the future
+///   and blocks until it completes. This is crucial as well. Since the
 ///   caller is sync, it needs the result to continue execution.
 pub fn sync_await<F: Future>(future: F) -> F::Output {
     task::block_in_place(|| {
-        let handle = Handle::current();
+        let handle = runtime::Handle::current();
         handle.block_on(future)
     })
 }
